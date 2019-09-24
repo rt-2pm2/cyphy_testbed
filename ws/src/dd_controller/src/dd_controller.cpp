@@ -40,6 +40,7 @@ bool DDController::Initialize(const ros::NodeHandle& n) {
     estimatorDDInit();
 
     msg_counter_ = 0;
+    msg_u_counter_ = 0;
 
     return true;
 }
@@ -55,9 +56,14 @@ bool DDController::LoadParameters(const ros::NodeHandle& n) {
 
 bool DDController::RegisterCallbacks(const ros::NodeHandle& n) {
     ros::NodeHandle nl(n);
+    // Subscriber for the sensor information
     sens_channel_ = nl.subscribe("/cf1/external_position", 
             15, 
             &DDController::estimatorDDNewMeasurement, this);
+    // Subscriber for the control information
+    ctrl_channel_ = nl.subscribe("/cf1/dd_ctrl", 
+		    15, 
+		    &DDController::estimatorDDNewCtrl, this);
 
     return true;
 }
@@ -374,6 +380,16 @@ void DDController::estimatorDDNewMeasurement(const boost::shared_ptr<geometry_ms
 
 }
 
+
+void DDController::estimatorDDNewCtrl(const crazyflie_driver::GenericLogData::ConstPtr& pData) {
+    msg_u_counter_++;
+
+    // Update the control value
+    estimatorDDSetControl(pData->values[0]);
+
+    return;
+}
+
 float DDController::estimatorDDGetEstimatedZ() {
 	return X_(0);
 }
@@ -393,7 +409,7 @@ bool DDController::estimatorDDHasNewEstimate() {
 }
 
 void DDController::estimatorDDSetControl(const float u) {
-	ctrl_ddd_=ctrl_dd_;
+	ctrl_ddd_ = ctrl_dd_;
 	ctrl_dd_ = u;
 
     return;

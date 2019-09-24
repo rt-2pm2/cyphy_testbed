@@ -7,12 +7,13 @@ find_package(
 	COMPONENTS 
 	roscpp 
 	std_msgs
+    crazyflie_demo
 	)
 find_package (Eigen3 REQUIRED NO_MODULE)
 
 catkin_package(
 	INCLUDE_DIRS include/ # The package contains header files
-	CATKIN_DEPENDS roscpp std_msgs
+	CATKIN_DEPENDS roscpp std_msgs crazyflie_demo
 	)
 
 # Since we use eigen

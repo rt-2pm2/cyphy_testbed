@@ -8,6 +8,8 @@
 
 #include "geometry_msgs/PointStamped.h"
 
+#include "crazyflie_driver/GenericLogData.h"
+
 #define STATE_SIZE (3)
 #define BUFF_SIZE (5)
 #define TS (0.004f)
@@ -38,7 +40,9 @@ class DDController {
         bool RegisterCallbacks(const ros::NodeHandle& n);
 
 		// Callback on Measurement 
-		void estimatorDDNewMeasurement(const boost::shared_ptr<geometry_msgs::PointStamped const>& pos); 
+		void estimatorDDNewMeasurement(const boost::shared_ptr<geometry_msgs::PointStamped const>& pData); 
+
+        void estimatorDDNewCtrl(const boost::shared_ptr<crazyflie_driver::GenericLogData const>& pData);
 
         float estimatorDDGetEstimatedZ();
 
@@ -103,9 +107,11 @@ class DDController {
         std::string name_;
 
         ros::Publisher dd_state_pub_;
-        ros::Subscriber  sens_channel_;
+        ros::Subscriber sens_channel_;
+        ros::Subscriber ctrl_channel_;
 
         int msg_counter_;
+        int msg_u_counter_;
 
 		// ====================================
         // Control Partial Signals
