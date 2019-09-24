@@ -52,8 +52,8 @@ def land_command(tg_p):
                     time.sleep(4.0)
                     resp1 = drones[activeDrone].goTo([tg_p[0], tg_p[1], tg_p[2]], 3.0)
 
-        except rospy.ServiceException as exc:
-            print("Service did not process request: " + str(exc))
+                except rospy.ServiceException as exc:
+                    print("Service did not process request: " + str(exc))
 
 def intercept_command(p):
     print("Intercept requested")
