@@ -1,0 +1,126 @@
+NumOfObjects: 8
+0:
+  name: "Anchor"
+  type: "Node"
+  color: "00FF00"
+  x: 2.5999999046325684
+  y: -2.049999952316284
+  z: 0.03
+  scale: [0.15, 0.15, 0.15]
+  opacity: 0.5
+  source: None
+1:
+  name: "Anchor"
+  type: "Node"
+  color: "00FF00"
+  x: -2.6600000858306885
+  y: -2.049999952316284
+  z: 0.03
+  scale: [0.15, 0.15, 0.15]
+  opacity: 0.5
+  source: None
+2:
+  name: "Anchor"
+  type: "Node"
+  color: "00FF00"
+  x: -2.6600000858306885
+  y: 1.4700000286102295
+  z: 0.03
+  scale: [0.15, 0.15, 0.15]
+  opacity: 0.5
+  source: None
+3:
+  name: "Anchor"
+  type: "Node"
+  color: "00FF00"
+  x: 2.5999999046325684
+  y: 1.4700000286102295
+  z: 0.7400000095367432
+  scale: [0.15, 0.15, 0.15]
+  opacity: 0.5
+  source: None
+4:
+  name: "Anchor"
+  type: "Node"
+  color: "00FF00"
+  x: -0.11999999731779099
+  y: -2.0999999046325684
+  z: 1.899999976158142
+  scale: [0.15, 0.15, 0.15]
+  opacity: 0.5
+  source: None
+5:
+  name: "Anchor"
+  type: "Node"
+  color: "00FF00"
+  x: 1.6200000047683716
+  y: -2.759999990463257
+  z: 1.399999976158142
+  scale: [0.15, 0.15, 0.15]
+  opacity: 0.5
+  source: None
+6:
+  name: "Anchor"
+  type: "Node"
+  color: "00FF00"
+  x: -0.99
+  y: 1.45
+  z: 0.76
+  scale: [0.15, 0.15, 0.15]
+  opacity: 0.5
+  source: None
+7:
+  name: "Anchor"
+  type: "Node"
+  color: "00FF00"
+  x: -2.39
+  y: 0.0
+  z: 0.78
+  scale: [0.15, 0.15, 0.15]
+  opacity: 0.5
+  source: None
+8:
+  name: "cf3"
+  type: "Drone"
+  color: "FFFFFF"
+  scale: [0.1, 0.1, 0.1]
+  opacity: 0.5
+  source: vrpn
+9:
+  name: "cf2"
+  type: "Drone"
+  color: "0044AA"
+  scale: [0.1, 0.1, 0.1]
+  opacity: 0.5
+  source: vrpn
+10:
+  name: "target"
+  type: "Target"
+  color: "00AA88"
+  scale: [0.3, 0.01, 0.3]
+  opacity: 0.4
+  source: vrpn
+11:
+  name: "floor"
+  type: "Target"
+  color: "222222"
+  scale: [4.5, 0.02, 3.0]
+  opacity: 0.4
+  source: vrpn
+12:
+  name: "land1"
+  type: "Target"
+  color: "0000AA"
+  scale: [0.3, 0.01, 0.3]
+  opacity: 0.5
+  source: vrpn
+13:
+  name: "nodeA"
+  type: "Node"
+  color: "00FF00"
+  x: -2.39
+  y: 0.0
+  z: 0.78
+  scale: [0.15, 0.15, 0.15]
+  opacity: 0.5
+  source: None

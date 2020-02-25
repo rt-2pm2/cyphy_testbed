@@ -22,7 +22,7 @@ scene = "test"
 
 entities = []
 
-drones = {'cf3': None, 'cf2': None}
+#drones = {'cf3': None, 'cf2': None}
 edges = {}
 
 AnchorObject_list = {}
@@ -113,99 +113,92 @@ def intercept_command(p):
 
 def generate_entities():
     global entities
+
     id_cnt = 3;
-    drone1 = DroneArenaClass(
-            mqtt_client,
-            scene,
-            'cf3',
-            id=id_cnt,
-            source="vrpn_client_node/cf3",
-            on_click_clb=toggle_active,
-            pos=[0,0.05,-0.25],
-            scale=[.1,.1,.1],
-            color="#0044AA",
-            text_visible = False,
-            opacity=0.2)
-    id_cnt = id_cnt + 1;
+    with open(dir_path + '/' + 'environment.yaml') as environment_file:
+        # use safe_load instead load
+        EnvironmentData = yaml.safe_load(environment_file)
+        
+        numOfObjects = EnvironmentData["NumOfObjects"]
+        print("Creating {} objects...".format(numOfObjects))
 
-    drone2 = DroneArenaClass(
-            mqtt_client,
-            scene,
-            'cf2',
-            id=id_cnt,
-            source="vrpn_client_node/cf2",
-            on_click_clb=toggle_active,
-            pos=[0,0.05,0.25],
-            scale=[.1,.1,.1],
-            color="#FFFFFF",
-            text_visible = False,
-            opacity=0.2)
-    id_cnt = id_cnt + 1;
+        for i in range(numOfObjects):
+            x = float(EnvironmentData[i]["x"])
+            y = float(EnvironmentData[i]["y"])
+            z = float(EnvironmentData[i]["z"])
 
-#    drone2_est = DroneArenaClass(
-#            mqtt_client,
-#            scene,
-#            'cf2',
-#            id=id_cnt,
-#            source="cf2",
-#            pos=[0,0.05,0.25],
-#            scale=[.1,.05,.1],
-#            color="#8844AA",
-#            text_visible = False,
-#            opacity=0.2)
-#    id_cnt = id_cnt + 1;
+            name = EnvironmentData["name"]
+            ArenaType = EnvironmentData["type"]
+            color = EnvironmentData["color"]
+            sc = EnvironmentData["scale"]
+            op = EnvironmentData["opacity"]
 
-    drones['cf3'] = drone1
-    drones['cf2'] = drone2
+            print("Adding Arena Object in " + 
+                    "[{} {} {}]".format(x, y, z))
 
-    target = TargetArenaClass(
-            mqtt_client,
-            scene,
-            'target',
-            id=id_cnt,
-            source="vrpn_client_node/target",
-            on_click_clb=intercept_command,
-            color="#00AA88",
-            scale=[0.3, 0.01, 0.3],
-            opacity=0.4)
-    id_cnt = id_cnt + 1;
-    
-    floor = TargetArenaClass(mqtt_client,
-            scene,
-            'floor',
-            id=id_cnt,
-            on_click_clb=issue_command,
-            color="#222222",
-            pos=[0.0,realm_y_offset,0.5],
-            quat=[0,0,0,1],
-            scale=[4.5,.02,3],
-            opacity=0.5,
-            marker_offset=[0,floor_offset,0])
-    id_cnt = id_cnt + 1;
+            if (ArenaType == "Node"):  
+                Node_dict['{}'.format(name)] = (
+                    NodeArenaClass(mqtt_client,
+                    scene,
+                    '{}{}'.format(name, i),
+                    id=id_cnt,
+                    color="#{}".format(color),
+                    pos=[x, realm_y_offset + z, -y],
+                    scale=[sc[0], sc[1], sc[2]], opacity=op) 
+                )
+            id_cnt = id_cnt + 1;
 
-    land1 = TargetArenaClass(
-            mqtt_client,
-            scene,
-            'land1',
-            id=id_cnt,
-            source="vrpn_client_node/land1",
-            on_click_clb=land_command,
-            color="#AA4400",
-            scale=[0.3, 0.01, 0.3],
-            opacity=0.5) 
-    id_cnt = id_cnt + 1;
+            if (ArenaType == "Drone"):
+                Drone_dict['{}'.format(name)] = (
+                    DroneArenaClass(
+                        mqtt_client,
+                        scene,
+                        name,
+                        id=id_cnt,
+                        source="vrpn_client_node/{}".format(name),
+                        on_click_clb=toggle_active,
+                        pos=[0,0,0],
+                        color="#{}".format(color),
+                        scale=[sc[0], sc[1], sc[2]],
+                        text_visible = False,
+                        opacity= op)
+                    )
+                id_cnt = id_cnt + 1;
 
-    land2 = TargetArenaClass(
-            mqtt_client,
-            scene,
-            'land2',
-            id=id_cnt,
-            source="vrpn_client_node/land2",
-            on_click_clb=land_command,
-            color="#0000AA",
-            scale=[0.3, 0.01, 0.3],
-            opacity=0.5)
-    id_cnt = id_cnt + 1;
+            if (ArenaType == "Target"):
+                if "target" is in name:
+                    callback = intercept_command
+                    marker_off = [0,0,0]
+                    src = "vrpn_client_node/{}".format(name)
+                if "floor" is in name:
+                    callback = issue_command 
+                    marker_off = [0,floor_offset,0]
+                    src = None
+                if "land" is in name:
+                    callback = land_command 
+                    marker_off = [0,floor_offset,0]
+                    src = "vrpn_client_node/{}".format(name)
+                    src = None
+
+                Target_dict['{}'.format(name)] = (
+                    TargetArenaClass(
+                        mqtt_client,
+                        scene,
+                        name,
+                        id = id_cnt,
+                        source = src,
+                        on_click_clb = callback,
+                        pos = [0,realm_y_offset,0],
+                        quat = [0,0,0,1],
+                        color = "#{}".format(color),
+                        scale = [sc[0], sc[1], sc[2]],
+                        text_visible = False,
+                        opacity= op,
+                        marker_offset = marker_off)
+                    ) 
+                id_cnt = id_cnt + 1;
+
+     
 
     nuc0 = NodeArenaClass(
             mqtt_client,
