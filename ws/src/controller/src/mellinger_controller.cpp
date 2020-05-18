@@ -335,7 +335,8 @@ namespace controller {
                         Quaterniond q_r = q_pq.inverse() * quat_.inverse() * Quaterniond(Rdes);
                         control_msg.control.yaw_dot = (q_r.w() > 0) ? (2.0 * kr_rates_ * q_r.z()) : (-2.0 * kr_rates_ * q_r.z());
                         control_msg.control.yaw_dot = -1.0 * control_msg.control.yaw_dot;
-
+                        
+                        control_msg.control.thrust = current_thrust;
                         break;
                     }
                     // Something is wrong if Default...

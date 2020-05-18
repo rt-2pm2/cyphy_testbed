@@ -6,7 +6,7 @@ using namespace std;
 
 void sim_thread_fnc(void* p);
 
-extern bool f1(vector<double>& x_,
+extern bool f2(vector<double>& x_,
         const vector<double>& x,
         const vector<double>& u, 
         double dt, void* param);
@@ -50,7 +50,7 @@ bool XSimulator::Initialize(const ros::NodeHandle& n) {
     old_time_.sec = 0;
     old_time_.nsec = 0; 
 
-    sim_ = new SimDyn(10, 4, 1, 0, &f1, &g1, &h1);
+    sim_ = new SimDyn(10, 4, 1, 0, &f2, &g1, &h1);
 
     initialized_ = true;
 
