@@ -163,54 +163,56 @@ class DroneObject(object):
     def state_callback(self, state_msg):
         pos = posFromStateMsg(state_msg)
         rot = quatFromStateMsg(state_msg)
-        self.set_pose(pos, rot)
 
-        head = self.trace_.get_head()
-        tail = self.trace_.get_tail()
+        if (np.linalg.norm(pos - self.old_pos) > 0.01):
+            self.set_pose(pos, rot)
 
-        if (np.linalg.norm(pos - self.old_pos) > 0.05):
-            self.old_pos = pos
-            self.trace_.append(pos)
+            head = self.trace_.get_head()
+            tail = self.trace_.get_tail()
 
-            wake = self.trace_.get()
+            if (np.linalg.norm(pos - self.old_pos) > 0.05):
+                self.old_pos = pos
+                self.trace_.append(pos)
 
-            new_p = wake[tail]
+                wake = self.trace_.get()
 
-            if (not self.trace_.is_full()):
-                temp_id = self.object_id + 'wake' + str(tail)
-                self.rarena_manager.add_object(
-                        temp_id,
-                        arena_srv = self.scene,
-                        position = np.array(new_p),
-                        object_id = temp_id,
-                        object_type = 'sphere',
-                        color = [255, 255, 255],
-                        scale = [0.01, 0.01, 0.01]
-                        )
-            else:
-                temp_id = self.object_id + 'wake' + str(head)
-                self.rarena_manager.add_object(
-                        temp_id,
-                        arena_srv = self.scene,
-                        position = np.array(new_p),
-                        object_id = temp_id,
-                        object_type = 'sphere',
-                        color = [255, 255, 255],
-                        scale = [0.01, 0.01, 0.01]
-                        )
+                new_p = wake[tail]
 
-        #for (index, el) in enumerate(wake):
-        #    if el is not None:
-        #        temp_id = self.object_id + 'wake' + str(index)
-        #        self.rarena_manager.add_object(
-        #                temp_id,
-        #                    arena_srv = self.scene,
-        #                    position = np.array(el),
-        #                    object_id = temp_id,
-        #                    object_type = 'sphere',
-        #                    color = [255, 255, 255],
-        #                    scale = [0.01, 0.01, 0.01]
-        #                )
+                if (not self.trace_.is_full()):
+                    temp_id = self.object_id + 'wake' + str(tail)
+                    self.rarena_manager.add_object(
+                            temp_id,
+                            arena_srv = self.scene,
+                            position = np.array(new_p),
+                            object_id = temp_id,
+                            object_type = 'sphere',
+                            color = [255, 255, 255],
+                            scale = [0.01, 0.01, 0.01]
+                            )
+                else:
+                    temp_id = self.object_id + 'wake' + str(head)
+                    self.rarena_manager.add_object(
+                            temp_id,
+                            arena_srv = self.scene,
+                            position = np.array(new_p),
+                            object_id = temp_id,
+                            object_type = 'sphere',
+                            color = [255, 255, 255],
+                            scale = [0.01, 0.01, 0.01]
+                            )
+
+            #for (index, el) in enumerate(wake):
+            #    if el is not None:
+            #        temp_id = self.object_id + 'wake' + str(index)
+            #        self.rarena_manager.add_object(
+            #                temp_id,
+            #                    arena_srv = self.scene,
+            #                    position = np.array(el),
+            #                    object_id = temp_id,
+            #                    object_type = 'sphere',
+            #                    color = [255, 255, 255],
+            #                    scale = [0.01, 0.01, 0.01]
+            #                )
             
             
 
